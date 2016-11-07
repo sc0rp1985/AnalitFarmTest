@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="Cassa.Wpf.Frames.WareList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Cassa.Wpf.Frames"
+             xmlns:Classes="clr-namespace:Cassa.Wpf.OperationService"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="Aquamarine">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Наименование товара" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+            <TextBlock Grid.Column="1" Text="Цена" HorizontalAlignment="Center" VerticalAlignment="Stretch"></TextBlock>
+        </Grid>
+        <ListView Grid.Row="1" ItemsSource="{Binding Items}" Background="Aqua" HorizontalContentAlignment="Stretch">
+            <ListView.ItemTemplate>
+               <DataTemplate DataType="{x:Type Classes:WareWcfDto}">
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding WareName}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                            <TextBlock Grid.Column="1" Text="{Binding Price}" HorizontalAlignment="Center" VerticalAlignment="Stretch"></TextBlock>
+                        </Grid>
+                    
+               </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>    
+    </Grid>
+</UserControl>

@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="Cassa.Wpf.Frames.CheckDetailList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Cassa.Wpf.Frames"
+             xmlns:Common="clr-namespace:Common;assembly=Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Common:VerticalScrollbarWidthToGridColumnWidthConverter x:Key="VerticalScrollbarWidthToGridColumnWidthConverter"/>
+    </UserControl.Resources>    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="Azure">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="{Binding Converter={StaticResource VerticalScrollbarWidthToGridColumnWidthConverter}}"/>
+
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0">
+                <TextBlock Text="Наименование товара" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></TextBlock>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1">
+                <TextBlock Text="Кол-во" HorizontalAlignment="Center" VerticalAlignment="Stretch" ></TextBlock>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2">
+                <TextBlock  Text="Сумма" HorizontalAlignment="Center" VerticalAlignment="Stretch"></TextBlock>
+            </Border>
+        </Grid>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+            <ListView ItemsSource="{Binding Items}" Background="Azure" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedDetItem}">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="{x:Type local:CheckDetailVM}">
+                        <Border BorderThickness="1" BorderBrush="Brown">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="7*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding WareName}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                                <TextBox Grid.Column="1" Text="{Binding Qty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" KeyDown="TextBox_KeyDown"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Summ}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

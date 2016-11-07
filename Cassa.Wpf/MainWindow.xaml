@@ -1,0 +1,29 @@
+﻿<Window x:Class="Cassa.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Cassa.Wpf"
+        xmlns:Frames="clr-namespace:Cassa.Wpf.Frames"
+        xmlns:Common="clr-namespace:Common;assembly=Common"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <Common:BoolToGridLengthConverter x:Key="BoolToGridLengthConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding IsShowWareList, Converter={StaticResourceExtension BoolToGridLengthConverter}}"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Frames:WareList DataContext="{Binding WareListVm}"/>
+        </ScrollViewer>
+        <Frames:Check DataContext="{Binding Check}" Grid.Row="1"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Click="Button_Click">обновить</Button>
+            <TextBlock Text="{Binding TestText}" MinWidth="100" Background="Blue"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>
