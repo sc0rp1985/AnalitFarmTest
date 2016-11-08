@@ -11,19 +11,19 @@
     <Window.Resources>
         <Common:BoolToGridLengthConverter x:Key="BoolToGridLengthConverter"/>
     </Window.Resources>
-    <Grid>
+    <Grid Background="BlueViolet">
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding IsShowWareList, Converter={StaticResourceExtension BoolToGridLengthConverter}}"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <Frames:WareList DataContext="{Binding WareListVm}"/>
-        </ScrollViewer>
+        
+        <Frames:WareList Margin="0,0,0,10" Grid.Row="0" DataContext="{Binding WareListVm}"/>
+        
         <Frames:Check DataContext="{Binding Check}" Grid.Row="1"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Click="Button_Click">обновить</Button>
-            <TextBlock Text="{Binding TestText}" MinWidth="100" Background="Blue"></TextBlock>
+            <Button Command="{Binding AddWareCMD}">Добавить</Button>
+            <TextBox Text="{Binding AddedWareName}" MinWidth="100" ></TextBox>
         </StackPanel>
     </Grid>
 </Window>

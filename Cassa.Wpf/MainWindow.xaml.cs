@@ -30,8 +30,9 @@ namespace Cassa.Wpf
 
         public WareListVM WareListVm { get; set; }
         public string TestText { get; set; }
+        public string AddedWareName { get; set; }
 
-        public ICommand TestCMD { get; set; }
+        public ICommand AddWareCMD { get; set; }
 
         public CheckVM Check { get; set; }
 
@@ -47,12 +48,28 @@ namespace Cassa.Wpf
                 .RegisterInstance(client);
 
             WareListVm = new WareListVM(cfg);
+            WareListVm.OnSelectItemEven += OnWareSelect;
             this.DataContext = this;
             OnPropertyChanged(nameof(WareListVm));
 
-            TestCMD = new CommandDelegate(Click,x=>true);
+            AddWareCMD = new CommandDelegate(AddWare,x=>true);
             IsShowWareList = false;
             CreateTestCheck();
+            OnPropertyChanged(nameof(Check));
+            
+        }
+
+        void AddWare(object obj)
+        {
+            IsShowWareList = true;
+            OnPropertyChanged(nameof(IsShowWareList));
+        }
+
+        void OnWareSelect(object sender, EventArgs args)
+        {
+            Check.AddWare(WareListVm.SelectedItem);
+            IsShowWareList = false;
+            OnPropertyChanged(nameof(IsShowWareList));
         }
 
         void Click(object obj)
@@ -75,9 +92,6 @@ namespace Cassa.Wpf
         {
             Check = new CheckVM
             {
-                Cash = 200,
-                Summ = 150,
-                OddMoney = 50,
                 Items = new ObservableCollection<CheckDetailVM>
                 {
                     new CheckDetailVM
@@ -95,7 +109,8 @@ namespace Cassa.Wpf
                         Ware = WareListVm.Items.FirstOrDefault(x=>x.WareId==3),
                         Qty = 3,
                     },
-                }
+                },
+                Cash = 200,
             };
             OnPropertyChanged(nameof(Check));
         }

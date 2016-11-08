@@ -6,6 +6,18 @@
              xmlns:local="clr-namespace:Cassa.Wpf.Frames"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="OddManeyStyle" TargetType="{x:Type StackPanel}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsValidCash}" Value="false">
+                    <Setter Property="Background" Value="Green"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsValidCash}" Value="true">
+                    <Setter Property="Background" Value="Red"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
 
         <Grid.RowDefinitions>
@@ -15,8 +27,38 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <local:CheckDetailList Grid.Row="0"/>
-        <Border Grid.Row="1" BorderThickness="1" BorderBrush="BlueViolet">
-            <local:CheckDetailInfo DataContext="{Binding SelectedDetItem}"/>
+        <Border Grid.Row="1" BorderThickness="1" BorderBrush="SaddleBrown">
+            <local:CheckDetailInfo DataContext="{Binding SelectedDetItem}" Background="Bisque"/>
         </Border>
+        <Grid Grid.Row="2" Background="BurlyWood">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Grid.RowSpan="2">
+                <TextBlock VerticalAlignment="Center">Позиций:</TextBlock>
+                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding CheckWareCount}"/>
+            </StackPanel>
+            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15">Сумма чека</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0" FontSize="20" Text="{Binding Summ}"/>
+        </Grid>
+        <Grid Grid.Row="3" Background="CadetBlue">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical" Grid.Column="0" Background="White">
+                <TextBlock HorizontalAlignment="Center">Наличные</TextBlock>
+                <TextBox HorizontalAlignment="Stretch" TextAlignment="Center" Text="{Binding Cash,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="1" Style="{StaticResource OddManeyStyle}">
+                <TextBlock HorizontalAlignment="Center">Сдача</TextBlock>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding OddMoney}" FontSize="20"></TextBlock>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

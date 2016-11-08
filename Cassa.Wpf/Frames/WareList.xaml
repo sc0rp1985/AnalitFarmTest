@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Aquamarine">
             <Grid.ColumnDefinitions>
@@ -21,7 +22,7 @@
             <TextBlock Grid.Column="0" Text="Наименование товара" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
             <TextBlock Grid.Column="1" Text="Цена" HorizontalAlignment="Center" VerticalAlignment="Stretch"></TextBlock>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding Items}" Background="Aqua" HorizontalContentAlignment="Stretch">
+        <ListView Grid.Row="1" ItemsSource="{Binding Items}" Background="Aqua" HorizontalContentAlignment="Stretch" KeyDown="UIElement_OnKeyDown" SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>
                <DataTemplate DataType="{x:Type Classes:WareWcfDto}">
                         <Grid HorizontalAlignment="Stretch">
@@ -35,6 +36,7 @@
                     
                </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>    
+        </ListView>
+        <TextBox Grid.Row="2" Text="{Binding AddedWareName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </UserControl>

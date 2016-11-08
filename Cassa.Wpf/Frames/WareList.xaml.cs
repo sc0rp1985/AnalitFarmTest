@@ -24,5 +24,19 @@ namespace Cassa.Wpf.Frames
         {
             InitializeComponent();
         }
+
+        private void UIElement_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Presenter.ItemSelect();
+            }
+        }
+
+        public WareListVM Presenter
+        {
+            get { return (WareListVM) DataContext; }
+            set { DataContext = value; }
+        }
     }
 }

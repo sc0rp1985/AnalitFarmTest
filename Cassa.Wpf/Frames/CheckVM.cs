@@ -14,6 +14,7 @@ namespace Cassa.Wpf.Frames
     public class CheckVM: INotifyPropertyChanged
     {
         private CheckDetailVM selectedDetItem;
+        private decimal cash = 0;
         public ObservableCollection<CheckDetailVM> Items { get; set; }
 
         public CheckDetailVM SelectedDetItem
@@ -26,11 +27,36 @@ namespace Cassa.Wpf.Frames
             }
         }
 
-        public decimal Summ { get; set; }
-        public decimal Cash { get; set; }
+        public bool IsValidCash { get { return OddMoney < 0; } }
+
+        public decimal Summ { get { return Items?.Count > 0 ? Items.Sum(x => x.Summ) : 0; }}
+
+        public decimal Cash
+        {
+            get { return cash; }
+            set
+            {
+                cash = value;
+                OddMoney = cash - Summ;
+                OnPropertyChanged(nameof(Cash));
+                OnPropertyChanged(nameof(OddMoney));
+                OnPropertyChanged(nameof(IsValidCash));
+            }
+        }
+
         public decimal OddMoney { get; set; }
+        public int CheckWareCount { get { return Items.Count; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void AddWare(WareWcfDto ware)
+        {
+            Items.Add(new CheckDetailVM
+            {
+                Ware = ware,
+                Qty = 1,
+            });
+        }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
