@@ -1,4 +1,4 @@
-# AnalitFarmTest
+п»ї# AnalitFarmTest
 
-Трехзвенка клиент - wcf сервер - бд mysql(entity framwork).
-Используется IoC контейнер Unity
+РўСЂРµС…Р·РІРµРЅРєР° РєР»РёРµРЅС‚ - wcf СЃРµСЂРІРµСЂ - Р±Рґ mysql(entity framwork).
+РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ IoC РєРѕРЅС‚РµР№РЅРµСЂ Unity
