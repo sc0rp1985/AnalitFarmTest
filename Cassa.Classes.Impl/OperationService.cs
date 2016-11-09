@@ -24,9 +24,9 @@ namespace Cassa.Classes.Impl
             return wares;
         }
 
-        public void CloseCheck(CheckWcfDto Check)
+        public int CloseCheck(CheckWcfDto Check)
         {
-            CassaService.CloseCheck(new CheckDto
+            return CassaService.CloseCheck(new CheckDto
             {
                 CheckId = Check.CheckId,
                 CashboxId = Check.CashboxId,

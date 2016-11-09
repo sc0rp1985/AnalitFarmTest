@@ -17,44 +17,59 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Cassa.Wpf.Annotations;
 using Cassa.Wpf.Frames;
+using Cassa.Wpf.OperationService;
+using Common;
 using Microsoft.Practices.Unity;
 
 namespace Cassa.Wpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private IUnityContainer cfg;
+        WcfClient client = new WcfClient();
+        private int cashBoxId = 1;
 
         public WareListVM WareListVm { get; set; }
         public string TestText { get; set; }
         public string AddedWareName { get; set; }
 
         public ICommand AddWareCMD { get; set; }
+        public ICommand CloseCheckCMD { get; set; }
+        public ICommand CreateCheckCMD { get; set; }
 
         public CheckVM Check { get; set; }
 
         public bool IsShowWareList { get; set; }
 
+        [Microsoft.Practices.Unity.Dependency]
+        public IWorker worker { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
 
-            var client = new WcfClient();
+            client = new WcfClient();
             cfg = new UnityContainer();
             cfg.RegisterInstance(cfg)
+                .RegisterType<IWorker, AsyncWorker>()
                 .RegisterInstance(client);
-
+            cfg.BuildUp(this);
             WareListVm = new WareListVM(cfg);
-            WareListVm.OnSelectItemEven += OnWareSelect;
+            WareListVm.SelectItemEven += WareSelect;
             this.DataContext = this;
             OnPropertyChanged(nameof(WareListVm));
 
-            AddWareCMD = new CommandDelegate(AddWare,x=>true);
+            AddWareCMD = new CommandDelegate(AddWare, x => Check.CheckId == 0 && worker.IsFree);
+            CloseCheckCMD = new CommandDelegate(CloseCheck, x=>Check.IsValidCash && Check.Summ>0 && Check.CheckId==0 && worker.IsFree);
+            CreateCheckCMD = new CommandDelegate(x =>
+            {
+                Check = new CheckVM();
+                OnPropertyChanged(nameof(Check));
+            }, x=>Check.CheckId > 0 && worker.IsFree);
             IsShowWareList = false;
-            CreateTestCheck();
+            Check = new CheckVM();
+            //CreateTestCheck();
             OnPropertyChanged(nameof(Check));
             
         }
@@ -63,30 +78,50 @@ namespace Cassa.Wpf
         {
             IsShowWareList = true;
             OnPropertyChanged(nameof(IsShowWareList));
+
         }
 
-        void OnWareSelect(object sender, EventArgs args)
+        void CloseCheck(object obj)
+        {
+
+            worker.Do(() =>
+            {
+
+                return client.CloseCheck(new CheckWcfDto
+                {
+                    Summ = Check.Summ,
+                    CashboxId = cashBoxId,
+                    DateTM = DateTime.Now,
+                    DetailList = Check.Items.Select(x => new CheckDetailWcfDto
+                    {
+                        WareId = x.WareId,
+                        Qty = x.Qty,
+                        Price = x.Price,
+                    }).ToArray()
+                });
+            },
+                result =>
+                {
+                    Check.CheckId = result;
+                },
+                error =>
+                {
+                    MessageBox.Show($"Ошибка закрытия чека!\n{error.Message}");
+                });
+
+
+
+
+        }
+
+        void WareSelect(object sender, EventArgs args)
         {
             Check.AddWare(WareListVm.SelectedItem);
             IsShowWareList = false;
             OnPropertyChanged(nameof(IsShowWareList));
         }
 
-        void Click(object obj)
-        {
-
-            TestText = "j rfr ";
-            OnPropertyChanged(nameof(TestText));
-            OnPropertyChanged(nameof(WareListVm));
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            TestText = "j rfr ";
-            OnPropertyChanged(nameof(TestText));
-            OnPropertyChanged(nameof(WareListVm));
-        }
+        
 
         void CreateTestCheck()
         {

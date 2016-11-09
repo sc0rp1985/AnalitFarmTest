@@ -34,9 +34,9 @@ namespace Cassa.Wcf
 	        return cfg.Resolve<IOperationService>().GetWareList(param);
 	    }
 
-	    public void CloseCheck(CheckWcfDto Check)
+	    public int CloseCheck(CheckWcfDto Check)
 	    {
-	        cfg.Resolve<IOperationService>().CloseCheck(Check);
+	        return cfg.Resolve<IOperationService>().CloseCheck(Check);
 	    }
 	}
 }

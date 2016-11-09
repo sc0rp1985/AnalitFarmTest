@@ -348,10 +348,10 @@ namespace Cassa.Wpf.OperationService {
         System.Threading.Tasks.Task<Cassa.Wpf.OperationService.WareWcfDto[]> GetWareListAsync(Cassa.Wpf.OperationService.WareLoadParams param);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOperationService/CloseCheck", ReplyAction="http://tempuri.org/IOperationService/CloseCheckResponse")]
-        void CloseCheck(Cassa.Wpf.OperationService.CheckWcfDto Check);
+        int CloseCheck(Cassa.Wpf.OperationService.CheckWcfDto Check);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOperationService/CloseCheck", ReplyAction="http://tempuri.org/IOperationService/CloseCheckResponse")]
-        System.Threading.Tasks.Task CloseCheckAsync(Cassa.Wpf.OperationService.CheckWcfDto Check);
+        System.Threading.Tasks.Task<int> CloseCheckAsync(Cassa.Wpf.OperationService.CheckWcfDto Check);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -389,11 +389,11 @@ namespace Cassa.Wpf.OperationService {
             return base.Channel.GetWareListAsync(param);
         }
         
-        public void CloseCheck(Cassa.Wpf.OperationService.CheckWcfDto Check) {
-            base.Channel.CloseCheck(Check);
+        public int CloseCheck(Cassa.Wpf.OperationService.CheckWcfDto Check) {
+            return base.Channel.CloseCheck(Check);
         }
         
-        public System.Threading.Tasks.Task CloseCheckAsync(Cassa.Wpf.OperationService.CheckWcfDto Check) {
+        public System.Threading.Tasks.Task<int> CloseCheckAsync(Cassa.Wpf.OperationService.CheckWcfDto Check) {
             return base.Channel.CloseCheckAsync(Check);
         }
     }

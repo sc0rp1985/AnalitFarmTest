@@ -14,7 +14,7 @@ namespace Cassa.Classes
         [OperationContract]
         List<WareWcfDto> GetWareList(WareLoadParams param);
         [OperationContract]
-        void CloseCheck(CheckWcfDto Check);
+        int CloseCheck(CheckWcfDto Check);
     }
 
     [DataContract]

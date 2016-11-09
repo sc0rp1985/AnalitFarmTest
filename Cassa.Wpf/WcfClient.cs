@@ -16,9 +16,9 @@ namespace Cassa.Wpf
             return client.GetWareList(param).ToList();
         }
 
-        public void CloseCheck(CheckWcfDto Check)
+        public int CloseCheck(CheckWcfDto Check)
         {
-            client.CloseCheck(Check);
+            return client.CloseCheck(Check);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Cassa.DAO
     {
         void AddWare(WareDto ware);
         List<WareDto> GetWareList();
-        void CloseCheck(CheckDto check);
+        int CloseCheck(CheckDto check);
     }
 
     public class CassaService : ICassaService
@@ -41,19 +41,8 @@ namespace Cassa.DAO
             return wares;
         }
 
-        public void CloseCheck(CheckDto check)
+        public int CloseCheck(CheckDto check)
         {
-            /*using (var db = C2SCore.BuildDatabaseContext())
-            {
-                using (var tran = new TransactionScope())
-                {
-                    db.Users.Add(new UserProfile { UserName = UserName, Password = Password });
-                    db.SaveChanges(); // <- Should work now after first exception
-                    tran.Complete();
-                }
-            }*/
-
-
             using (var context = new CassaContext(conStrName))
             {
                 using (var tran = new TransactionScope())
@@ -100,6 +89,7 @@ namespace Cassa.DAO
                     context.SaveChanges();
                     //throw new ApplicationException("test");
                     tran.Complete();
+                    return checkDao.CheckId;
                 }
             }
         }

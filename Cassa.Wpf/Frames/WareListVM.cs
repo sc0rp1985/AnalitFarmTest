@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows;
 using Cassa.Wpf.Annotations;
 using Cassa.Wpf.OperationService;
 using Common;
@@ -17,7 +17,7 @@ namespace Cassa.Wpf.Frames
 {
     public class WareListVM : INotifyPropertyChanged
     {
-        public event EventHandler OnSelectItemEven;
+        public event EventHandler SelectItemEven;
 
         public IUnityContainer Cfg { get; set; }
         public WcfClient client { get; set; }
@@ -27,6 +27,9 @@ namespace Cassa.Wpf.Frames
         private ObservableCollection<WareWcfDto> WareList { get; set; }
         public ObservableCollection<WareWcfDto> Items { get; set; }
         public WareWcfDto SelectedItem { get; set; }
+
+        [Microsoft.Practices.Unity.Dependency]
+        public IWorker Worker { get; set; }
 
         public string AddedWareName
         {
@@ -43,6 +46,7 @@ namespace Cassa.Wpf.Frames
         public WareListVM(IUnityContainer cfg)
         {
             Cfg = cfg;
+            Cfg.BuildUp(this);
             client = cfg.Resolve<WcfClient>();
             WareList = new ObservableCollection<WareWcfDto>();
             Items = new ObservableCollection<WareWcfDto>();
@@ -52,14 +56,20 @@ namespace Cassa.Wpf.Frames
         void Refresh()
         {
             Items = new ObservableCollection<WareWcfDto>();
-            Items = client.GetWareList(new WareLoadParams()).ToObservableCollection();
-            WareList = Items.ToObservableCollection();
-            OnPropertyChanged(nameof(Items));
+            Worker.Do(() => { return client.GetWareList(new WareLoadParams()).ToObservableCollection(); },
+                result =>
+                {
+                    Items = result;
+                    WareList = Items.ToObservableCollection();
+                    OnPropertyChanged(nameof(Items));
+                },
+                error => { MessageBox.Show($"Ошибка загрузки списка товаров!\n{error.Message}"); });
+            
         }
 
         public void ItemSelect()
         {
-            OnSelectItemEven?.Invoke(this, EventArgs.Empty);
+            SelectItemEven?.Invoke(this, EventArgs.Empty);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -18,8 +18,7 @@ namespace Cassa.Wpf
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-         
-
+             
         }
     }
 }

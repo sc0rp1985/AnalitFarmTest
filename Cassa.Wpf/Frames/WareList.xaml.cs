@@ -38,5 +38,10 @@ namespace Cassa.Wpf.Frames
             get { return (WareListVM) DataContext; }
             set { DataContext = value; }
         }
+
+        private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Presenter.ItemSelect();
+        }
     }
 }

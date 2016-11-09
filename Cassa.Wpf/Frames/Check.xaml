@@ -9,10 +9,10 @@
     <UserControl.Resources>
         <Style x:Key="OddManeyStyle" TargetType="{x:Type StackPanel}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsValidCash}" Value="false">
+                <DataTrigger Binding="{Binding IsValidCash}" Value="true">
                     <Setter Property="Background" Value="Green"></Setter>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding IsValidCash}" Value="true">
+                <DataTrigger Binding="{Binding IsValidCash}" Value="false">
                     <Setter Property="Background" Value="Red"></Setter>
                 </DataTrigger>
             </Style.Triggers>
@@ -39,9 +39,13 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Grid.RowSpan="2">
-                <TextBlock VerticalAlignment="Center">Позиций:</TextBlock>
-                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding CheckWareCount}"/>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" >
+                    <TextBlock Margin="10" VerticalAlignment="Center">Позиций:</TextBlock>
+                    <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding CheckWareCount}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" >
+                <TextBlock Margin="10" VerticalAlignment="Center">Номер чека:</TextBlock>
+                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding CheckIdStr}"/>
             </StackPanel>
             <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15">Сумма чека</TextBlock>
             <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0" FontSize="20" Text="{Binding Summ}"/>
@@ -53,7 +57,9 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical" Grid.Column="0" Background="White">
                 <TextBlock HorizontalAlignment="Center">Наличные</TextBlock>
-                <TextBox HorizontalAlignment="Stretch" TextAlignment="Center" Text="{Binding Cash,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20"></TextBox>
+                <TextBox HorizontalAlignment="Stretch" TextAlignment="Center" 
+                         Text="{Binding CashStr,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                         FontSize="20" KeyDown="UIElement_OnKeyDown"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Column="1" Style="{StaticResource OddManeyStyle}">
                 <TextBlock HorizontalAlignment="Center">Сдача</TextBlock>

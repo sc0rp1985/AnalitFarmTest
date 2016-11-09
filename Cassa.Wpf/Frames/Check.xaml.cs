@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Common;
 
 namespace Cassa.Wpf.Frames
 {
@@ -23,6 +24,16 @@ namespace Cassa.Wpf.Frames
         public Check()
         {
             InitializeComponent();
+        }
+
+        private void UIElement_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            bool b = InputHelpers.IsValidDigitKey(e.Key);
+            if (b == false)
+            {
+                e.Handled = true;
+            }
+            base.OnKeyDown(e);
         }
     }
 }
