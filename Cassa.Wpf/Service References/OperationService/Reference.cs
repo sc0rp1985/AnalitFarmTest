@@ -22,6 +22,12 @@ namespace Cassa.Wpf.OperationService {
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LoadLimitField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string WareNameField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -29,6 +35,32 @@ namespace Cassa.Wpf.OperationService {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LoadLimit {
+            get {
+                return this.LoadLimitField;
+            }
+            set {
+                if ((this.LoadLimitField.Equals(value) != true)) {
+                    this.LoadLimitField = value;
+                    this.RaisePropertyChanged("LoadLimit");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string WareName {
+            get {
+                return this.WareNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.WareNameField, value) != true)) {
+                    this.WareNameField = value;
+                    this.RaisePropertyChanged("WareName");
+                }
             }
         }
         

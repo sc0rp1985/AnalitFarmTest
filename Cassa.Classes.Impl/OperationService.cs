@@ -15,7 +15,12 @@ namespace Cassa.Classes.Impl
 
         public List<WareWcfDto> GetWareList(WareLoadParams param)
         {
-            var wares = CassaService.GetWareList().Select(x=>new WareWcfDto
+            
+            var wares = CassaService.GetWareList(new QueryParam
+            {
+                Name = param.WareName,
+                Limit = param.LoadLimit,
+            }).Select(x=>new WareWcfDto
             {
                 WareId = x.WareId,
                 Price = x.Price,

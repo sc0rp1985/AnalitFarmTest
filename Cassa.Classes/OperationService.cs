@@ -20,7 +20,10 @@ namespace Cassa.Classes
     [DataContract]
     public class WareLoadParams
     {
-        
+        [DataMember]
+        public string WareName { get; set; }
+        [DataMember]
+        public int LoadLimit { get; set; }
     }
 
 

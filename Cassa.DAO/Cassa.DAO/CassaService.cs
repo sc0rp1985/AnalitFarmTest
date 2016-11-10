@@ -10,7 +10,7 @@ namespace Cassa.DAO
     public interface ICassaService
     {
         void AddWare(WareDto ware);
-        List<WareDto> GetWareList();
+        List<WareDto> GetWareList(QueryParam param);
         int CloseCheck(CheckDto check);
     }
 
@@ -31,12 +31,17 @@ namespace Cassa.DAO
             }
         }
 
-        public List<WareDto> GetWareList()
+        public List<WareDto> GetWareList(QueryParam param)
         {
             var wares = new List<WareDto>();
             using (var context = new CassaContext(conStrName))
             {
-               wares = context.Wares.Select(x=>x).ToList().Select(WareDto.FromDao).ToList();
+                IQueryable<Ware> query = context.Wares;
+                if (!string.IsNullOrEmpty(param.Name))
+                    query = query.Where(x => x.WareName.StartsWith(param.Name));
+                if (param.Limit > 0)
+                    query = query.Take(param.Limit);
+                wares = query.Select(x=>x).ToList().Select(WareDto.FromDao).ToList();
             }
             return wares;
         }
@@ -152,5 +157,11 @@ namespace Cassa.DAO
                 CashboxId = dao.CashboxId,
             };
         }
+    }
+
+    public class QueryParam
+    {
+        public int Limit { get; set; }
+        public string Name { get; set; }
     }
 }

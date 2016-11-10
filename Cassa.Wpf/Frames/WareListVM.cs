@@ -41,6 +41,15 @@ namespace Cassa.Wpf.Frames
             {
                 addedWareName = value;
                 Items = WareList.Where(x => x.WareName.StartsWith(addedWareName)).ToObservableCollection();
+                if (Items.Count == 0 && addedWareName.Length >= 5)
+                {
+                    Items = LoadWareList(new WareLoadParams
+                    {
+                        LoadLimit = 5,
+                        WareName = addedWareName,
+                    });
+                    WareList = Items.ToObservableCollection();
+                }
                 OnPropertyChanged(nameof(Items));
             }
         }
@@ -56,13 +65,22 @@ namespace Cassa.Wpf.Frames
             Refresh();
         }
 
+        ObservableCollection<WareWcfDto> LoadWareList(WareLoadParams param)
+        {
+            return client.GetWareList(param).ToObservableCollection();
+        }
+
         void Refresh()
         {
             Items = new ObservableCollection<WareWcfDto>();
             Worker.Do(() =>
             {
                 OnStartLoadEvent();
-                return client.GetWareList(new WareLoadParams()).ToObservableCollection();
+                return LoadWareList(new WareLoadParams
+                {
+                    LoadLimit = 5,
+                    WareName = string.Empty,
+                });
             },
                 result =>
                 {
