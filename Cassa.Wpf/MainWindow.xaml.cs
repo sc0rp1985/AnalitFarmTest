@@ -37,10 +37,10 @@ namespace Cassa.Wpf
         public ICommand AddWareCMD { get; set; }
         public ICommand CloseCheckCMD { get; set; }
         public ICommand CreateCheckCMD { get; set; }
-
         public CheckVM Check { get; set; }
-
         public bool IsShowWareList { get; set; }
+        public bool IsWareListLoaded => WareListVm?.Items.Count > 0;
+        public string StateMsg { get; set; }
 
         [Microsoft.Practices.Unity.Dependency]
         public IWorker worker { get; set; }
@@ -57,10 +57,13 @@ namespace Cassa.Wpf
             cfg.BuildUp(this);
             WareListVm = new WareListVM(cfg);
             WareListVm.SelectItemEven += WareSelect;
+            WareListVm.LoadCompleetEvent += OnWareListCompleetLoad;
+            WareListVm.LoadErrorEvent += OnWareListErrorLoad;
+            WareListVm.StartLoadEvent += OnWareListStartLoad;
             this.DataContext = this;
             OnPropertyChanged(nameof(WareListVm));
 
-            AddWareCMD = new CommandDelegate(AddWare, x => Check.CheckId == 0 && worker.IsFree);
+            AddWareCMD = new CommandDelegate(AddWare, x => Check.CheckId == 0 && worker.IsFree && IsWareListLoaded);
             CloseCheckCMD = new CommandDelegate(CloseCheck, x=>Check.IsValidCash && Check.Summ>0 && Check.CheckId==0 && worker.IsFree);
             CreateCheckCMD = new CommandDelegate(x =>
             {
@@ -121,7 +124,28 @@ namespace Cassa.Wpf
             OnPropertyChanged(nameof(IsShowWareList));
         }
 
-        
+        void OnWareListStartLoad(object sender, EventArgs args)
+        {
+            StateMsg = "Загружается список товаров";
+            OnPropertyChanged(nameof(IsWareListLoaded));
+            OnPropertyChanged(nameof(StateMsg));
+        }
+
+        void OnWareListCompleetLoad(object sender, EventArgs args)
+        {
+            StateMsg = "Список товаров загружен";
+            OnPropertyChanged(nameof(IsWareListLoaded));
+            OnPropertyChanged(nameof(StateMsg));
+        }
+
+        void OnWareListErrorLoad(object sender, EventArgs args)
+        {
+            StateMsg = "Ошибка загрузки";
+            OnPropertyChanged(nameof(IsWareListLoaded));
+            OnPropertyChanged(nameof(StateMsg));
+        }
+
+
 
         void CreateTestCheck()
         {

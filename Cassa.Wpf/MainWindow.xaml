@@ -24,8 +24,9 @@
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <TextBlock Margin="5" Grid.Column="0" Text="{Binding StateMsg}"/>
             <StackPanel  Orientation="Horizontal" Grid.Column="1">
                 <Button ToolTip="Добавить товар в чек" Margin="5" Command="{Binding AddWareCMD}" >Добавить</Button>
                 <Button Margin="5" Command="{Binding CloseCheckCMD}">Закрыть чек</Button>

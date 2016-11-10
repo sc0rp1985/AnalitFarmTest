@@ -18,6 +18,9 @@ namespace Cassa.Wpf.Frames
     public class WareListVM : INotifyPropertyChanged
     {
         public event EventHandler SelectItemEven;
+        public event EventHandler StartLoadEvent;
+        public event EventHandler LoadCompleetEvent;
+        public event EventHandler LoadErrorEvent;
 
         public IUnityContainer Cfg { get; set; }
         public WcfClient client { get; set; }
@@ -56,14 +59,23 @@ namespace Cassa.Wpf.Frames
         void Refresh()
         {
             Items = new ObservableCollection<WareWcfDto>();
-            Worker.Do(() => { return client.GetWareList(new WareLoadParams()).ToObservableCollection(); },
+            Worker.Do(() =>
+            {
+                OnStartLoadEvent();
+                return client.GetWareList(new WareLoadParams()).ToObservableCollection();
+            },
                 result =>
                 {
                     Items = result;
                     WareList = Items.ToObservableCollection();
                     OnPropertyChanged(nameof(Items));
+                    OnLoadCompleetEvent();
                 },
-                error => { MessageBox.Show($"Ошибка загрузки списка товаров!\n{error.Message}"); });
+                error =>
+                {
+                    OnLoadErrorEvent();
+                    MessageBox.Show($"Ошибка загрузки списка товаров!\n{error.Message}");
+                });
             
         }
 
@@ -78,6 +90,21 @@ namespace Cassa.Wpf.Frames
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void OnStartLoadEvent()
+        {
+            StartLoadEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnLoadCompleetEvent()
+        {
+            LoadCompleetEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnLoadErrorEvent()
+        {
+            LoadErrorEvent?.Invoke(this, EventArgs.Empty);
         }
     }
 }
